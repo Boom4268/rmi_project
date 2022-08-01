@@ -6,6 +6,10 @@ package rmi.controller;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rmi.DAO.AccountDAO;
 import rmi.model.Account;
 
 /**
@@ -14,8 +18,11 @@ import rmi.model.Account;
  */
 public class AccountImpl extends UnicastRemoteObject implements AccountInterface{
     
+    private AccountDAO accountDao;
+    
     public AccountImpl() throws RemoteException{
         super();
+        accountDao = new AccountDAO();
     }
 
     @Override
@@ -25,7 +32,12 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
 
     @Override
     public Account login(String username, String password) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        try {
+            return accountDao.checkLogin(username, password);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -34,8 +46,12 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
     }
 
     @Override
-    public Account update(int id, Account account) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void update(Account account) throws RemoteException {
+        try {
+            accountDao.updateAccount(account);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -45,7 +61,11 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
 
     @Override
     public Account getById(int id) throws RemoteException {
-        return new Account(1, "a","a",1);
+        try {
+            return accountDao.getAccountById(id);
+        } catch (SQLException ex) {
+           return null;
+        }
     }
 
     @Override
