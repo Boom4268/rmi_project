@@ -6,6 +6,7 @@ package client;
 
 import java.rmi.Naming;
 import rmi.controller.AccountInterface;
+import rmi.model.Account;
 
 /**
  *
@@ -13,11 +14,8 @@ import rmi.controller.AccountInterface;
  */
 public class RMIClient {
     public static void main(String args[]){
-        try{
-            AccountInterface acc = (AccountInterface) Naming.lookup("rmi://localhost/AccountService");
-            System.out.println(acc.getById(0).getUsername());
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        LoginView view = new LoginView();
+        ClientController clientController = new ClientController(view);
+        view.setVisible(true);
     }
 }

@@ -19,7 +19,7 @@ public interface AccountInterface extends Remote{
     
     public int create(Account account) throws RemoteException;
     
-    public Account update(int id, Account account) throws RemoteException;
+    public void update(Account account) throws RemoteException;
     
     public void delete(int id) throws RemoteException;
 
