@@ -6,6 +6,7 @@ package rmi.controller;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import rmi.model.Account;
 
 /**
@@ -25,7 +26,7 @@ public interface AccountInterface extends Remote{
 
     public Account getById(int id) throws RemoteException;
 
-    public Account[] getAll() throws RemoteException;
+    public List<Account> getAll() throws RemoteException;
 
 
 }
