@@ -11,8 +11,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rmi.controller.AccountInterface;
 import rmi.model.Account;
 
@@ -47,6 +45,10 @@ public class ClientController {
                     ClientView view = new ClientView(res);
                     view.addChangeListener(new UpdateListener());
                     view.setVisible(true);
+                    if(res.getRole() == 1){
+                        view.setDataTable(accountServer.getAll());
+                    }
+                    
                     clientView = view;
                     loginView.setVisible(false);
                 }else {
