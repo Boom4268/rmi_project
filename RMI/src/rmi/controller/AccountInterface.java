@@ -14,7 +14,6 @@ import rmi.model.Account;
  * @author MinhDuc
  */
 public interface AccountInterface extends Remote{
-    public Account register(String username, String password) throws RemoteException;
     
     public Account login(String username, String password) throws RemoteException;
     
@@ -22,11 +21,10 @@ public interface AccountInterface extends Remote{
     
     public void update(Account account) throws RemoteException;
     
-    public void delete(int id) throws RemoteException;
+    public void delete(Account account) throws RemoteException;
 
     public Account getById(int id) throws RemoteException;
 
     public List<Account> getAll() throws RemoteException;
-
 
 }

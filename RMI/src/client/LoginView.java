@@ -23,15 +23,28 @@ public class LoginView extends javax.swing.JFrame {
     public Account getAccount(){
         String username = userNameTextField.getText().trim();
         String pass = passwordTextField.getText().trim();
-        return new Account(0, username, pass, 0);
+        if(username.equals("") || pass.equals("")){
+            this.showMess("Username or password do not empty !", "Warning");
+            return null;
+        }
+        return new Account(0, username, pass, 2);
     }
     
     public void addLoginListener(ActionListener e){
         loginBtn.addActionListener(e);
     }
     
-    public void showMess(String mess){
-        JOptionPane.showMessageDialog(null, mess, "Thất bại", HEIGHT);
+    public void addRegisterListener(ActionListener e){
+        registerBtn.addActionListener(e);
+    }
+    
+    public void showMess(String mess, String title){
+        JOptionPane.showMessageDialog(null, mess, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void refresh(){
+       userNameTextField.setText("");
+       passwordTextField.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +59,7 @@ public class LoginView extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         loginBtn = new javax.swing.JButton();
+        registerBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +127,8 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
+        registerBtn.setText("Register");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,7 +143,9 @@ public class LoginView extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(63, 63, 63)
+                .addComponent(registerBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(loginBtn)
                 .addGap(61, 61, 61))
         );
@@ -139,7 +157,9 @@ public class LoginView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loginBtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginBtn)
+                    .addComponent(registerBtn))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -159,6 +179,7 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loginBtn;
     private javax.swing.JTextField passwordTextField;
+    private javax.swing.JButton registerBtn;
     private javax.swing.JTextField userNameTextField;
     // End of variables declaration//GEN-END:variables
 }

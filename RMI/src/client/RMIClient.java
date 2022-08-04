@@ -4,10 +4,6 @@
  */
 package client;
 
-import java.rmi.Naming;
-import rmi.controller.AccountInterface;
-import rmi.model.Account;
-
 /**
  *
  * @author MinhDuc

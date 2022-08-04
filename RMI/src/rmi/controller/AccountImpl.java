@@ -27,11 +27,6 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
     }
 
     @Override
-    public Account register(String username, String password) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-
-    @Override
     public Account login(String username, String password) throws RemoteException {
         try {
             Account res = accountDao.checkLogin(username, password);
@@ -44,7 +39,13 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
 
     @Override
     public int create(Account account) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        try {
+            return accountDao.createAccount(account);
+        } catch (SQLException ex) {
+           System.out.println(ex);
+           System.out.println("Loois");
+           return -1;
+        }
     }
 
     @Override
@@ -57,8 +58,12 @@ public class AccountImpl extends UnicastRemoteObject implements AccountInterface
     }
 
     @Override
-    public void delete(int id) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void delete(Account acc) throws RemoteException {
+        try {
+            accountDao.deleteAccount(acc);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
