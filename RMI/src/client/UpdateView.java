@@ -15,6 +15,7 @@ public class UpdateView extends javax.swing.JFrame {
  
     public UpdateView() {
         initComponents();
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
     
     public String getNewPassword(){

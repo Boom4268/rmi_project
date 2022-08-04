@@ -19,7 +19,7 @@ public class ClientController {
     private ClientView clientView;
     private UpdateView updateView;
     private AccountInterface accountServer;
-   
+    
     public ClientController(LoginView loginView) {
         try {
             this.accountServer = (AccountInterface) Naming.lookup("rmi://localhost/AccountService");
@@ -32,6 +32,7 @@ public class ClientController {
         }
         this.loginView = loginView;
         this.loginView.addLoginListener(new LoginListener());
+        this.loginView.addRegisterListener(new RegisterListener());
     }
     
     class LoginListener implements ActionListener{
@@ -39,11 +40,14 @@ public class ClientController {
         public void actionPerformed(ActionEvent e) {
             try{
                 Account accNew = loginView.getAccount();
+                if(null == accNew) return;
                 Account res = accountServer.login(accNew.getUsername(), accNew.getPassword());
                 if(null != res){
-                    System.out.println("Login thanh cong !!! id_user = " + res.getId());
                     ClientView view = new ClientView(res);
-                    view.addChangeListener(new UpdateListener());
+                    view.addChangePasswordListener(new ChangePasswordListener());
+                    view.addCreateListener(new CreateListener());
+                    view.addUpdateListener(new UpdateListener());
+                    view.addDeleteListener(new DeleteListener());
                     view.setVisible(true);
                     if(res.getRole() == 1){
                         view.setDataTable(accountServer.getAll());
@@ -52,7 +56,7 @@ public class ClientController {
                     clientView = view;
                     loginView.setVisible(false);
                 }else {
-                    loginView.showMess("Tên tài khoản hoặc mật khẩu không đúng !!!");
+                    loginView.showMess("Incorrect !!!", "Fail");
                 }
            }catch(Exception ex){
                 System.out.println(e);
@@ -60,7 +64,7 @@ public class ClientController {
         }  
     }
     
-    class UpdateListener implements ActionListener{
+    class ChangePasswordListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             updateView = new UpdateView();
@@ -90,6 +94,94 @@ public class ClientController {
                 
             }
         }  
+    }
+    
+    class UpdateListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Account acc = clientView.getAccountToChange();
+            if(acc.getPassword().equals("") || acc.getUsername().equals("")){
+                clientView.showLog("Warning", "Do not leave information empty !!!");
+                return;
+            }
+            if(acc.getId() == -1){
+                clientView.showLog("Warning", "Choose a account !!!");
+                return;
+            }
+            try {
+                accountServer.update(acc);
+                clientView.showLog("Success", "Update Success !");
+                clientView.setDataTable(accountServer.getAll());
+                clientView.resfresh();
+            } catch (RemoteException ex) {
+                
+            }
+        }
+    }
+    
+    class DeleteListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Account acc = clientView.getAccountToChange();
+            if(acc.getId() == -1){
+                clientView.showLog("Warning", "Choose a account !!!");
+                return;
+            }
+            try {
+                accountServer.delete(acc);
+                clientView.showLog("Success", "Delete Success !");
+                clientView.setDataTable(accountServer.getAll());
+                clientView.resfresh();
+            } catch (RemoteException ex) {
+                
+            }
+        }
+    }
+    
+    class RegisterListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Account acc = loginView.getAccount();
+             if(null == acc) return;
+            try {
+                int res = accountServer.create(acc);
+                if(res == -1){
+                    loginView.showMess("Account already exists ", "Fail");
+                    return;
+                }
+                loginView.showMess("Register Success ", "Success");
+                loginView.refresh();
+            } catch (RemoteException ex) {
+              
+            }
+        }
+    }
+    
+    class CreateListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Account acc = clientView.getAccountToChange();
+            if(acc.getPassword().equals("") || acc.getUsername().equals("")){
+                clientView.showLog("Warning", "Do not leave information empty !!!");
+                return;
+            }
+            try {
+                int res = accountServer.create(acc);
+                if(res == -1){
+                    clientView.showLog("Fail", "Account already exists ");
+                    return;
+                }
+                clientView.showLog("Success", "Register Success ");
+                clientView.setDataTable(accountServer.getAll());
+                clientView.resfresh();
+            } catch (RemoteException ex) {
+              
+            }
+        }
     }
     
 }

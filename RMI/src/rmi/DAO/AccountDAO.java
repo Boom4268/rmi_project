@@ -76,24 +76,24 @@ public class AccountDAO extends DAO{
     
     //quy dinh: -: account is exsited; != -1 : create sussecss
     public int createAccount(Account acc) throws SQLException{
-        String sql = "SELECT * FROM account as acc "
-                    + " WHERE acc.user_name = ? ";
+        String sql = "SELECT * FROM account "
+                    + " WHERE user_name = ? ";
         PreparedStatement pstm = this.conn.prepareStatement(sql);
         pstm.setString(1, acc.getUsername());
         ResultSet rs = pstm.executeQuery();
-        int temp= 0;
+        int temp = 0;
         while (rs.next()) {
            temp ++ ;
         }
-        if(temp > 0) return -1;
+        if(temp != 0) return -1;
         else {
-            sql =  "INSERT INTO `account` VALUES (?,?,?)";
+            sql =  "INSERT INTO `account` (`user_name`, `password`, `role`) VALUES (?,?,?)";
             pstm = this.conn.prepareStatement(sql);
             pstm.setString(1, acc.getUsername());
             pstm.setString(2, acc.getPassword());
             pstm.setInt(3, acc.getRole());
             int res = pstm.executeUpdate();
-            return res;
+            return 1;
         }
     }
     
